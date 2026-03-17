@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像工坊 - 一站式图像处理工具</title>
+    <style>
+        :root {
+            --primary: #3f51b5;
+            --primary-light: #5c6bc0;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #333;
+            --text-secondary: #666;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 16px 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 0 60px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary), #f50057);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: var(--card-bg);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .tab:hover { background: var(--border); }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 16px;
+        }
+
+        .tool-card h3 {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .tool-card p {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+        }
+
+        .tool-tag.hot {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        /* Tool Panel */
+        .tool-panel {
+            display: none;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .tool-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .panel-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .panel-header p {
+            color: var(--text-secondary);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 48px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(63, 81, 181, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .upload-input { display: none; }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Preview */
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .preview-box {
+            text-align: center;
+        }
+
+        .preview-box h4 {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 20px 20px;
+        }
+
+        /* Processing Overlay */
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .processing-overlay.show { display: flex; }
+
+        .processing-box {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #eee;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            background: white;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.8rem; }
+            main { padding: 80px 16px 24px; }
+            .tool-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🖼️</div>
+                <span>图像工坊</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>图像工坊</h1>
+            <p>免费 · 安全 · 高效 · 智能的一站式图像处理工具</p>
+            
+            <div class="tabs">
+                <button class="tab active" data-category="all">全部</button>
+                <button class="tab" data-category="ai">AI工具</button>
+                <button class="tab" data-category="edit">基础编辑</button>
+                <button class="tab" data-category="convert">格式转换</button>
+            </div>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card" data-category="edit">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">📷</div>
+                <h3>证件照制作</h3>
+                <p>智能人像抠图，多尺寸多背景色选择</p>
+                <span class="tool-tag hot">热门</span>
+            </div>
+            
+            <div class="tool-card" data-category="edit">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">🗜️</div>
+                <h3>图片压缩</h3>
+                <p>智能压缩，支持PNG、JPG、WebP格式</p>
+                <span class="tool-tag">基础编辑</span>
+            </div>
+            
+            <div class="tool-card" data-category="edit">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">📐</div>
+                <h3>调整大小</h3>
+                <p>快速调整图片尺寸，保持原始比例</p>
+                <span class="tool-tag">基础编辑</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">🔄</div>
+                <h3>格式转换</h3>
+                <p>支持JPG、PNG、WebP、GIF格式互转</p>
+                <span class="tool-tag hot">热门</span>
+            </div>
+            
+            <div class="tool-card" data-category="edit">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">🔵</div>
+                <h3>圆角处理</h3>
+                <p>为图片添加圆角效果，边缘平滑自然</p>
+                <span class="tool-tag">基础编辑</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">🎨</div>
+                <h3>Midjourney提示词</h3>
+                <p>输入关键词，AI生成创意图像提示词</p>
+                <span class="tool-tag">AI工具</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #d299c2, #fef9d7);">📄</div>
+                <h3>图片转PDF</h3>
+                <p>将多张图片合并转换为PDF文档</p>
+                <span class="tool-tag">格式转换</span>
+            </div>
+            
+            <div class="tool-card" data-category="edit">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">💧</div>
+                <h3>图片去水印</h3>
+                <p>智能识别并移除图片中的水印</p>
+                <span class="tool-tag">基础编辑</span>
+            </div>
+        </div>
+
+        <!-- 证件照工具面板 -->
+        <div class="tool-panel" id="panel-photo-id">
+            <div class="panel-header">
+                <h2>📷 证件照制作</h2>
+                <p>上传照片，智能更换背景色和尺寸</p>
+            </div>
+            
+            <div class="upload-area" id="photoIdUpload">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">点击或拖拽上传照片</div>
+                <div class="upload-hint">支持 JPG、PNG 格式</div>
+                <input type="file" class="upload-input" id="photoIdInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>照片尺寸</label>
+                    <select id="photoSize">
+                        <option value="1寸">一寸 (295×413px)</option>
+                        <option value="2寸">二寸 (413×579px)</option>
+                        <option value="大一寸">大一寸 (335×450px)</option>
+                        <option value="小二寸">小二寸 (390×260px)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>背景颜色</label>
+                    <div style="display: flex; gap: 12px;">
+                        <div class="bg-color white active" data-color="#FFFFFF" style="width:40px;height:40px;background:#fff;border:2px solid #ddd;border-radius:50%;cursor:pointer;"></div>
+                        <div class="bg-color blue" data-color="#007AFF" style="width:40px;height:40px;background:#007AFF;border-radius:50%;cursor:pointer;"></div>
+                        <div class="bg-color red" data-color="#FF3B30" style="width:40px;height:40px;background:#FF3B30;border-radius:50%;cursor:pointer;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="photoIdProcess">✨ 开始处理</button>
+            </div>
+
+            <div class="preview-container" id="photoIdPreview" style="display: none;">
+                <div class="preview-box">
+                    <h4>原始照片</h4>
+                    <img class="preview-image" id="photoIdOriginal" alt="原始">
+                </div>
+                <div class="preview-box">
+                    <h4>处理后</h4>
+                    <img class="preview-image" id="photoIdResult" alt="结果">
+                </div>
+            </div>
+        </div>
+
+        <!-- Midjourney 提示词面板 -->
+        <div class="tool-panel" id="panel-mj">
+            <div class="panel-header">
+                <h2>🎨 Midjourney 提示词生成</h2>
+                <p>输入关键词，AI 为你生成创意图像提示词</p>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group" style="flex: 1;">
+                    <label>输入关键词</label>
+                    <input type="text" id="mjKeywords" placeholder="如：星空、猫咪、赛博朋克城市...">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="mjGenerate">✨ 生成提示词</button>
+            </div>
+
+            <div id="mjResult" style="display: none; margin-top: 24px;">
+                <div style="background: #f8f8f8; padding: 20px; border-radius: 12px; white-space: pre-wrap; font-family: monospace;"></div>
+                <div class="btn-group" style="margin-top: 16px;">
+                    <button class="btn btn-primary" id="mjCopy">📋 复制</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 图像工坊 · 免费 · 安全 · 本地处理</p>
+    </footer>
+
+    <div class="processing-overlay" id="processing">
+        <div class="processing-box">
+            <div class="spinner"></div>
+            <p>正在处理...</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const category = tab.dataset.category;
+                
+                document.querySelectorAll('.tool-card').forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Tool card click
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('h3').textContent;
+                if (title.includes('证件照')) {
+                    showPanel('panel-photo-id');
+                } else if (title.includes('Midjourney')) {
+                    showPanel('panel-mj');
+                } else {
+                    showToast('该功能开发中...');
+                }
+            });
+        });
+
+        function showPanel(panelId) {
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+            document.getElementById(panelId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Photo ID Tool
+        const photoIdInput = document.getElementById('photoIdInput');
+        const photoIdUpload = document.getElementById('photoIdUpload');
+        let photoIdImage = null;
+        let selectedBgColor = '#FFFFFF';
+
+        photoIdUpload.addEventListener('click', () => photoIdInput.click());
+        photoIdInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handlePhotoFile(file);
+        });
+
+        function handlePhotoFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                photoIdImage = new Image();
+                photoIdImage.onload = () => {
+                    document.getElementById('photoIdOriginal').src = e.target.result;
+                    document.getElementById('photoIdPreview').style.display = 'grid';
+                    showToast('照片上传成功');
+                };
+                photoIdImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        document.querySelectorAll('.bg-color').forEach(el => {
+            el.addEventListener('click', () => {
+                document.querySelectorAll('.bg-color').forEach(e => e.style.border = '2px solid #ddd');
+                el.style.border = '2px solid #3f51b5';
+                selectedBgColor = el.dataset.color;
+            });
+        });
+
+        document.getElementById('photoIdProcess').addEventListener('click', async () => {
+            if (!photoIdImage) {
+                showToast('请先上传照片');
+                return;
+            }
+
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+
+            await new Promise(r => setTimeout(r, 1500));
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const sizes = { '1寸': [295, 413], '2寸': [413, 579], '大一寸': [335, 450], '小二寸': [390, 260] };
+            const [w, h] = sizes[document.getElementById('photoSize').value];
+            canvas.width = w;
+            canvas.height = h;
+
+            ctx.fillStyle = selectedBgColor;
+            ctx.fillRect(0, 0, w, h);
+
+            const scale = Math.min(w / photoIdImage.width, h / photoIdImage.height) * 0.8;
+            const sw = photoIdImage.width * scale;
+            const sh = photoIdImage.height * scale;
+            const x = (w - sw) / 2;
+            const y = (h - sh) / 2;
+
+            ctx.drawImage(photoIdImage, x, y, sw, sh);
+
+            document.getElementById('photoIdResult').src = canvas.toDataURL('image/png');
+            processing.classList.remove('show');
+            showToast('处理完成');
+        });
+
+        // Midjourney Tool
+        const DEEPSEEK_KEY = 'sk-c2f2ce816b3f43b09b6740f702ad3f36';
+        const API_URL = 'https://api.deepseek.com/v1/chat/completions';
+
+        document.getElementById('mjGenerate').addEventListener('click', async () => {
+            const keywords = document.getElementById('mjKeywords').value.trim();
+            if (!keywords) {
+                showToast('请输入关键词');
+                return;
+            }
+
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_KEY}` },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            { role: 'system', content: '你是一个Midjourney提示词生成专家，生成详细创意英文提示词' },
+                            { role: 'user', content: `为"${keywords}"生成Midjourney提示词` }
+                        ],
+                        temperature: 0.9
+                    })
+                });
+
+                const data = await res.json();
+                const result = data.choices[0].message.content;
+                
+                document.querySelector('#mjResult div').textContent = result;
+                document.getElementById('mjResult').style.display = 'block';
+            } catch (e) {
+                showToast('生成失败: ' + e.message);
+            } finally {
+                processing.classList.remove('show');
+            }
+        });
+
+        document.getElementById('mjCopy').addEventListener('click', () => {
+            const text = document.querySelector('#mjResult div').textContent;
+            navigator.clipboard.writeText(text);
+            showToast('已复制');
+        });
+    </script>
+</body>
+</html>
