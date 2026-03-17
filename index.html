@@ -572,6 +572,140 @@
                     <img class="preview-image" id="photoIdResult" alt="结果">
                 </div>
             </div>
+            <div class="btn-group" id="photoIdDownloadGroup" style="display: none; margin-top: 16px;">
+                <button class="btn btn-primary" id="photoIdDownload">⬇️ 下载证件照</button>
+            </div>
+        </div>
+
+        <!-- 图片压缩面板 -->
+        <div class="tool-panel" id="panel-compress">
+            <div class="panel-header">
+                <h2>🗜️ 图片压缩</h2>
+                <p>智能压缩图片，保持质量减小体积</p>
+            </div>
+            
+            <div class="upload-area" id="compressUpload">
+                <div class="upload-icon">🗜️</div>
+                <div class="upload-text">点击或拖拽上传图片</div>
+                <div class="upload-hint">支持 JPG、PNG、WebP 格式</div>
+                <input type="file" class="upload-input" id="compressInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>压缩质量: <span id="compressValue">80</span>%</label>
+                    <div class="slider-container">
+                        <input type="range" id="compressQuality" min="10" max="100" value="80">
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="compressBtn">✨ 开始压缩</button>
+            </div>
+
+            <div class="preview-container" id="compressPreview" style="display: none;">
+                <div class="preview-box">
+                    <h4>原始大小: <span id="compressOriginalSize">-</span></h4>
+                    <img class="preview-image" id="compressOriginal" alt="原始">
+                </div>
+                <div class="preview-box">
+                    <h4>压缩后: <span id="compressNewSize">-</span> (<span id="compressRatio">-</span>)</h4>
+                    <img class="preview-image" id="compressResult" alt="压缩后">
+                </div>
+            </div>
+        </div>
+
+        <!-- 调整大小面板 -->
+        <div class="tool-panel" id="panel-resize">
+            <div class="panel-header">
+                <h2>📐 调整大小</h2>
+                <p>快速调整图片尺寸</p>
+            </div>
+            
+            <div class="upload-area" id="resizeUpload">
+                <div class="upload-icon">📐</div>
+                <div class="upload-text">点击或拖拽上传图片</div>
+                <div class="upload-hint">支持 JPG、PNG、WebP 格式</div>
+                <input type="file" class="upload-input" id="resizeInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>宽度 (px)</label>
+                    <input type="number" id="resizeWidth" placeholder="自动">
+                </div>
+                <div class="control-group">
+                    <label>高度 (px)</label>
+                    <input type="number" id="resizeHeight" placeholder="自动">
+                </div>
+                <div class="control-group">
+                    <label>保持比例</label>
+                    <input type="checkbox" id="resizeRatio" checked>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="resizeBtn">✨ 调整大小</button>
+            </div>
+        </div>
+
+        <!-- 格式转换面板 -->
+        <div class="tool-panel" id="panel-format">
+            <div class="panel-header">
+                <h2>🔄 格式转换</h2>
+                <p>转换图片格式</p>
+            </div>
+            
+            <div class="upload-area" id="formatUpload">
+                <div class="upload-icon">🔄</div>
+                <div class="upload-text">点击或拖拽上传图片</div>
+                <div class="upload-hint">支持 JPG、PNG、WebP、GIF 格式</div>
+                <input type="file" class="upload-input" id="formatInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>转换为</label>
+                    <select id="formatSelect">
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp">WebP</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="formatBtn">✨ 转换格式</button>
+            </div>
+        </div>
+
+        <!-- 圆角处理面板 -->
+        <div class="tool-panel" id="panel-rounded">
+            <div class="panel-header">
+                <h2>🔵 圆角处理</h2>
+                <p>为图片添加圆角效果</p>
+            </div>
+            
+            <div class="upload-area" id="roundedUpload">
+                <div class="upload-icon">🔵</div>
+                <div class="upload-text">点击或拖拽上传图片</div>
+                <div class="upload-hint">支持 JPG、PNG 格式</div>
+                <input type="file" class="upload-input" id="roundedInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>圆角大小: <span id="roundedValue">20</span>px</label>
+                    <div class="slider-container">
+                        <input type="range" id="roundedRadius" min="0" max="100" value="20">
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="roundedBtn">✨ 添加圆角</button>
+            </div>
         </div>
 
         <!-- Midjourney 提示词面板 -->
@@ -624,7 +758,9 @@
                 const category = tab.dataset.category;
                 
                 document.querySelectorAll('.tool-card').forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
+                    if (category === 'all') {
+                        card.style.display = 'block';
+                    } else if (card.dataset.category === category) {
                         card.style.display = 'block';
                     } else {
                         card.style.display = 'none';
@@ -641,8 +777,18 @@
                     showPanel('panel-photo-id');
                 } else if (title.includes('Midjourney')) {
                     showPanel('panel-mj');
-                } else {
-                    showToast('该功能开发中...');
+                } else if (title.includes('压缩')) {
+                    showPanel('panel-compress');
+                } else if (title.includes('调整大小')) {
+                    showPanel('panel-resize');
+                } else if (title.includes('格式转换')) {
+                    showPanel('panel-format');
+                } else if (title.includes('圆角')) {
+                    showPanel('panel-rounded');
+                } else if (title.includes('PDF')) {
+                    showToast('图片转PDF功能开发中...');
+                } else if (title.includes('去水印')) {
+                    showToast('去水印功能开发中...');
                 }
             });
         });
@@ -688,11 +834,18 @@
 
         document.querySelectorAll('.bg-color').forEach(el => {
             el.addEventListener('click', () => {
-                document.querySelectorAll('.bg-color').forEach(e => e.style.border = '2px solid #ddd');
+                document.querySelectorAll('.bg-color').forEach(e => {
+                    e.style.border = '2px solid #ddd';
+                    e.classList.remove('active');
+                });
                 el.style.border = '2px solid #3f51b5';
+                el.classList.add('active');
                 selectedBgColor = el.dataset.color;
             });
         });
+        
+        // Set initial active state
+        document.querySelector('.bg-color.white').style.border = '2px solid #3f51b5';
 
         document.getElementById('photoIdProcess').addEventListener('click', async () => {
             if (!photoIdImage) {
@@ -723,9 +876,21 @@
 
             ctx.drawImage(photoIdImage, x, y, sw, sh);
 
-            document.getElementById('photoIdResult').src = canvas.toDataURL('image/png');
+            const resultDataUrl = canvas.toDataURL('image/png');
+            document.getElementById('photoIdResult').src = resultDataUrl;
+            document.getElementById('photoIdDownloadGroup').style.display = 'flex';
             processing.classList.remove('show');
             showToast('处理完成');
+        });
+
+        // Photo ID Download
+        document.getElementById('photoIdDownload').addEventListener('click', () => {
+            const result = document.getElementById('photoIdResult').src;
+            const link = document.createElement('a');
+            link.download = `证件照-${document.getElementById('photoSize').value}-${Date.now()}.png`;
+            link.href = result;
+            link.click();
+            showToast('下载已开始');
         });
 
         // Midjourney Tool
@@ -772,6 +937,215 @@
             const text = document.querySelector('#mjResult div').textContent;
             navigator.clipboard.writeText(text);
             showToast('已复制');
+        });
+
+        // Slider value displays
+        document.getElementById('compressQuality').addEventListener('input', (e) => {
+            document.getElementById('compressValue').textContent = e.target.value;
+        });
+
+        document.getElementById('roundedRadius').addEventListener('input', (e) => {
+            document.getElementById('roundedValue').textContent = e.target.value;
+        });
+
+        // Compress Tool
+        let compressImage = null;
+        document.getElementById('compressUpload').addEventListener('click', () => document.getElementById('compressInput').click());
+        document.getElementById('compressInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    compressImage = new Image();
+                    compressImage.onload = () => {
+                        document.getElementById('compressOriginal').src = ev.target.result;
+                        document.getElementById('compressOriginalSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+                        document.getElementById('compressPreview').style.display = 'grid';
+                    };
+                    compressImage.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('compressBtn').addEventListener('click', async () => {
+            if (!compressImage) {
+                showToast('请先上传图片');
+                return;
+            }
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+            await new Promise(r => setTimeout(r, 800));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = compressImage.width;
+            canvas.height = compressImage.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(compressImage, 0, 0);
+            
+            const quality = parseInt(document.getElementById('compressQuality').value) / 100;
+            const result = canvas.toDataURL('image/jpeg', quality);
+            
+            document.getElementById('compressResult').src = result;
+            const newSize = Math.round(result.length * 0.75);
+            document.getElementById('compressNewSize').textContent = (newSize / 1024).toFixed(1) + ' KB';
+            const ratio = Math.round((1 - newSize / compressImage.src.length) * 100);
+            document.getElementById('compressRatio').textContent = ratio > 0 ? '-' + ratio + '%' : '+' + Math.abs(ratio) + '%';
+            processing.classList.remove('show');
+            showToast('压缩完成');
+        });
+
+        // Resize Tool
+        let resizeImage = null;
+        document.getElementById('resizeUpload').addEventListener('click', () => document.getElementById('resizeInput').click());
+        document.getElementById('resizeInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    resizeImage = new Image();
+                    resizeImage.onload = () => {
+                        document.getElementById('resizeWidth').value = resizeImage.width;
+                        document.getElementById('resizeHeight').value = resizeImage.height;
+                    };
+                    resizeImage.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('resizeBtn').addEventListener('click', async () => {
+            if (!resizeImage) {
+                showToast('请先上传图片');
+                return;
+            }
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+            await new Promise(r => setTimeout(r, 500));
+
+            let w = parseInt(document.getElementById('resizeWidth').value) || resizeImage.width;
+            let h = parseInt(document.getElementById('resizeHeight').value) || resizeImage.height;
+            
+            if (document.getElementById('resizeRatio').checked) {
+                const ratio = Math.min(w / resizeImage.width, h / resizeImage.height);
+                w = Math.round(resizeImage.width * ratio);
+                h = Math.round(resizeImage.height * ratio);
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(resizeImage, 0, 0, w, h);
+
+            const link = document.createElement('a');
+            link.download = `resized-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            processing.classList.remove('show');
+            showToast('调整完成，已下载');
+        });
+
+        // Format Tool
+        let formatImage = null;
+        document.getElementById('formatUpload').addEventListener('click', () => document.getElementById('formatInput').click());
+        document.getElementById('formatInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    formatImage = { src: ev.target.result, file: file };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('formatBtn').addEventListener('click', async () => {
+            if (!formatImage) {
+                showToast('请先上传图片');
+                return;
+            }
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+            await new Promise(r => setTimeout(r, 500));
+
+            const canvas = document.createElement('canvas');
+            const img = new Image();
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                const format = document.getElementById('formatSelect').value;
+                const ext = format === 'image/jpeg' ? 'jpg' : format === 'image/png' ? 'png' : 'webp';
+                const result = canvas.toDataURL(format, 0.9);
+                
+                const link = document.createElement('a');
+                link.download = `converted-${Date.now()}.${ext}`;
+                link.href = result;
+                link.click();
+                
+                processing.classList.remove('show');
+                showToast('转换完成，已下载');
+            };
+            img.src = formatImage.src;
+        });
+
+        // Rounded Tool
+        let roundedImage = null;
+        document.getElementById('roundedUpload').addEventListener('click', () => document.getElementById('roundedInput').click());
+        document.getElementById('roundedInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    roundedImage = new Image();
+                    roundedImage.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('roundedBtn').addEventListener('click', async () => {
+            if (!roundedImage) {
+                showToast('请先上传图片');
+                return;
+            }
+            const processing = document.getElementById('processing');
+            processing.classList.add('show');
+            await new Promise(r => setTimeout(r, 500));
+
+            const radius = parseInt(document.getElementById('roundedRadius').value);
+            const canvas = document.createElement('canvas');
+            canvas.width = roundedImage.width;
+            canvas.height = roundedImage.height;
+            const ctx = canvas.getContext('2d');
+
+            // Create rounded path
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(canvas.width - radius, 0);
+            ctx.quadraticCurveTo(canvas.width, 0, canvas.width, radius);
+            ctx.lineTo(canvas.width, canvas.height - radius);
+            ctx.quadraticCurveTo(canvas.width, canvas.height, canvas.width - radius, canvas.height);
+            ctx.lineTo(radius, canvas.height);
+            ctx.quadraticCurveTo(0, canvas.height, 0, canvas.height - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.clip();
+
+            ctx.drawImage(roundedImage, 0, 0);
+
+            const link = document.createElement('a');
+            link.download = `rounded-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            processing.classList.remove('show');
+            showToast('圆角添加完成，已下载');
         });
     </script>
 </body>
