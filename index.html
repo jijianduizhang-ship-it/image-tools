@@ -522,6 +522,13 @@
                 <p>智能识别并移除图片中的水印</p>
                 <span class="tool-tag">基础编辑</span>
             </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">📝</div>
+                <h3>日报生成器</h3>
+                <p>填写数据，自动生成工作日报</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
         </div>
 
         <!-- 证件照工具面板 -->
@@ -734,6 +741,54 @@
             </div>
         </div>
 
+        <!-- 日报生成器面板 -->
+        <div class="tool-panel" id="panel-daily">
+            <div class="panel-header">
+                <h2>📝 日报生成器</h2>
+                <p>填写数据，自动生成工作日报</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="control-group">
+                    <label>日期</label>
+                    <input type="date" id="reportDate">
+                </div>
+                <div class="control-group">
+                    <label>姓名</label>
+                    <input type="text" id="reportName" placeholder="请输入姓名">
+                </div>
+                <div class="control-group">
+                    <label>部门</label>
+                    <input type="text" id="reportDept" placeholder="请输入部门">
+                </div>
+                <div class="control-group">
+                    <label>今日完成工作</label>
+                    <textarea id="reportDone" rows="3" placeholder="1. xxx&#10;2. xxx&#10;3. xxx"></textarea>
+                </div>
+                <div class="control-group">
+                    <label>工作中遇到的问题</label>
+                    <textarea id="reportIssue" rows="3" placeholder="无 / 遇到xxx问题..."></textarea>
+                </div>
+                <div class="control-group">
+                    <label>明日工作计划</label>
+                    <textarea id="reportPlan" rows="3" placeholder="1. xxx&#10;2. xxx&#10;3. xxx"></textarea>
+                </div>
+                <div class="control-group">
+                    <label>备注</label>
+                    <textarea id="reportNote" rows="2" placeholder="其他需要说明的事项"></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="reportGenerate">✨ 生成日报</button>
+                <button class="btn btn-primary" id="reportCopy" style="background: #4CAF50;">📋 复制结果</button>
+            </div>
+
+            <div id="reportResult" style="display: none; margin-top: 24px;">
+                <div style="background: #f8f8f8; padding: 20px; border-radius: 12px; white-space: pre-wrap; font-family: monismo, sans-serif; line-height: 1.8;" id="reportContent"></div>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -789,6 +844,8 @@
                     showToast('图片转PDF功能开发中...');
                 } else if (title.includes('去水印')) {
                     showToast('去水印功能开发中...');
+                } else if (title.includes('日报')) {
+                    showPanel('panel-daily');
                 }
             });
         });
@@ -1146,6 +1203,57 @@
             
             processing.classList.remove('show');
             showToast('圆角添加完成，已下载');
+        });
+
+        // Daily Report Generator
+        // Set default date to today
+        document.getElementById('reportDate').valueAsDate = new Date();
+
+        document.getElementById('reportGenerate').addEventListener('click', () => {
+            const date = document.getElementById('reportDate').value || new Date().toLocaleDateString('zh-CN');
+            const name = document.getElementById('reportName').value || '【姓名】';
+            const dept = document.getElementById('reportDept').value || '【部门】';
+            const done = document.getElementById('reportDone').value || '无';
+            const issue = document.getElementById('reportIssue').value || '无';
+            const plan = document.getElementById('reportPlan').value || '待定';
+            const note = document.getElementById('reportNote').value || '无';
+
+            const report = `【工作日报】
+
+【日期】${date}
+【姓名】${name}
+【部门】${dept}
+
+━━━━━━━━━━━━━━━━━━
+
+【今日完成工作】
+${done}
+
+【工作中遇到的问题】
+${issue}
+
+【明日工作计划】
+${plan}
+
+【备注】
+${note}
+
+━━━━━━━━━━━━━━━━━━
+Powered by 图像工坊`;
+
+            document.getElementById('reportContent').textContent = report;
+            document.getElementById('reportResult').style.display = 'block';
+            showToast('日报生成成功');
+        });
+
+        document.getElementById('reportCopy').addEventListener('click', () => {
+            const text = document.getElementById('reportContent').textContent;
+            if (!text) {
+                showToast('请先生成日报');
+                return;
+            }
+            navigator.clipboard.writeText(text);
+            showToast('已复制到剪贴板');
         });
     </script>
 </body>
