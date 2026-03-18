@@ -585,6 +585,41 @@
                 <p>计算复利收益，了解财富增长</p>
                 <span class="tool-tag hot">NEW</span>
             </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">🔲</div>
+                <h3>二维码生成</h3>
+                <p>输入文字或链接生成二维码</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">🏠</div>
+                <h3>房贷计算器</h3>
+                <p>计算房贷月供和总利息</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">⚖️</div>
+                <h3>BMI计算器</h3>
+                <p>计算身体质量指数</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">🔐</div>
+                <h3>密码生成器</h3>
+                <p>生成安全随机密码</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">⏰</div>
+                <h3>时间戳转换</h3>
+                <p>Unix时间戳互转</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
         </div>
 
         <!-- 证件照工具面板 -->
@@ -949,6 +984,251 @@
             </div>
         </div>
 
+        <!-- 二维码生成面板 -->
+        <div class="tool-panel" id="panel-qrcode">
+            <div class="panel-header">
+                <h2>🔲 二维码生成</h2>
+                <p>输入文字或链接，生成二维码图片</p>
+            </div>
+            
+            <div class="controls" style="display: block;">
+                <div class="control-group">
+                    <label>内容</label>
+                    <input type="text" id="qrcodeContent" placeholder="输入网址或文字">
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>尺寸: <span id="qrcodeSizeValue">200</span>px</label>
+                    <div class="slider-container">
+                        <input type="range" id="qrcodeSize" min="100" max="400" value="200">
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="qrcodeGenerate">✨ 生成二维码</button>
+                <button class="btn btn-primary" id="qrcodeDownload" style="background: #4CAF50; display: none;">📥 下载</button>
+            </div>
+
+            <div class="preview-container" id="qrcodePreview" style="display: none;">
+                <div class="preview-box">
+                    <h4>二维码预览</h4>
+                    <div id="qrcodeCanvas" style="display: flex; justify-content: center; padding: 20px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 房贷计算器面板 -->
+        <div class="tool-panel" id="panel-mortgage">
+            <div class="panel-header">
+                <h2>🏠 房贷计算器</h2>
+                <p>计算房贷月供金额和总利息</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="control-group">
+                    <label>贷款总额 (万元)</label>
+                    <input type="number" id="mortgageAmount" placeholder="例如: 100" value="100">
+                </div>
+                <div class="control-group">
+                    <label>贷款期限</label>
+                    <select id="mortgageYears">
+                        <option value="5">5年 (60期)</option>
+                        <option value="10">10年 (120期)</option>
+                        <option value="15">15年 (180期)</option>
+                        <option value="20" selected>20年 (240期)</option>
+                        <option value="25">25年 (300期)</option>
+                        <option value="30">30年 (360期)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>年利率 (%)</label>
+                    <input type="number" id="mortgageRate" placeholder="例如: 3.1" value="3.1" step="0.01">
+                </div>
+                <div class="control-group">
+                    <label>还款方式</label>
+                    <select id="mortgageType">
+                        <option value="average">等额本息 (每月相同)</option>
+                        <option value="principal">等额本金 (逐月递减)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="mortgageCalculate">✨ 计算月供</button>
+            </div>
+
+            <div id="mortgageResult" style="display: none; margin-top: 24px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);">
+                    <h3 style="margin-bottom: 20px; font-size: 20px;">📊 房贷明细</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">首月月供</div>
+                            <div style="font-size: 24px; font-weight: bold;" id="mortgageFirstMonth">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">每月递减</div>
+                            <div style="font-size: 24px; font-weight: bold;" id="mortgageDecrease">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">总利息</div>
+                            <div style="font-size: 24px; font-weight: bold;" id="mortgageTotalInterest">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">还款总额</div>
+                            <div style="font-size: 24px; font-weight: bold;" id="mortgageTotal">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMI计算器面板 -->
+        <div class="tool-panel" id="panel-bmi">
+            <div class="panel-header">
+                <h2>⚖️ BMI计算器</h2>
+                <p>计算身体质量指数，了解健康状况</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="control-group">
+                    <label>身高 (cm)</label>
+                    <input type="number" id="bmiHeight" placeholder="例如: 170" value="170">
+                </div>
+                <div class="control-group">
+                    <label>体重 (kg)</label>
+                    <input type="number" id="bmiWeight" placeholder="例如: 65" value="65">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="bmiCalculate">✨ 计算BMI</button>
+            </div>
+
+            <div id="bmiResult" style="display: none; margin-top: 24px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);">
+                    <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center;">📊 您的BMI结果</h3>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 64px; font-weight: bold;" id="bmiValue">-</div>
+                        <div style="font-size: 24px;" id="bmiLevel">-</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; font-size: 12px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 8px;">
+                            <div>偏瘦</div>
+                            <div>&lt;18.5</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 8px;">
+                            <div>正常</div>
+                            <div>18.5-24</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 8px;">
+                            <div>偏胖</div>
+                            <div>24-28</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 12px; border-radius: 8px;">
+                            <div>肥胖</div>
+                            <div>&gt;28</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 密码生成器面板 -->
+        <div class="tool-panel" id="panel-password">
+            <div class="panel-header">
+                <h2>🔐 密码生成器</h2>
+                <p>生成安全的随机密码</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="control-group">
+                    <label>密码长度: <span id="pwdLengthValue">16</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="pwdLength" min="6" max="64" value="16">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>包含字符</label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                            <input type="checkbox" id="pwdUpper" checked> 大写字母 (A-Z)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                            <input type="checkbox" id="pwdLower" checked> 小写字母 (a-z)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                            <input type="checkbox" id="pwdNumber" checked> 数字 (0-9)
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                            <input type="checkbox" id="pwdSymbol" checked> 特殊字符 (!@#$%^&*)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="pwdGenerate">✨ 生成密码</button>
+                <button class="btn btn-primary" id="pwdCopy" style="background: #4CAF50; display: none;">📋 复制</button>
+            </div>
+
+            <div id="pwdResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 24px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 20px; word-break: break-all; font-family: monospace; margin-bottom: 12px;" id="pwdOutput">-</div>
+                    <div style="font-size: 14px; color: var(--text-secondary);">密码强度: <span id="pwdStrength">-</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 时间戳转换面板 -->
+        <div class="tool-panel" id="panel-timestamp">
+            <div class="panel-header">
+                <h2>⏰ 时间戳转换</h2>
+                <p>Unix时间戳与日期时间互转</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="control-group">
+                    <label>当前时间戳</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="tsInput" placeholder="例如: 1704067200">
+                        <button class="btn btn-primary" id="tsNow" style="padding: 14px 20px;">now</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>或选择日期时间</label>
+                    <input type="datetime-local" id="tsDateInput">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="tsToDate">时间戳→日期</button>
+                <button class="btn btn-primary" id="tsToTimestamp">日期→时间戳</button>
+            </div>
+
+            <div id="tsResult" style="display: none; margin-top: 24px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);">
+                    <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center;">📊 转换结果</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">秒级时间戳</div>
+                            <div style="font-size: 20px; font-weight: bold; word-break: break-all;" id="tsSecond">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">毫秒级时间戳</div>
+                            <div style="font-size: 20px; font-weight: bold; word-break: break-all;" id="tsMilli">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; grid-column: span 2;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">日期时间</div>
+                            <div style="font-size: 20px; font-weight: bold; word-break: break-all;" id="tsDate">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -966,6 +1246,8 @@
 
     <!-- jsPDF库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- 二维码库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -1010,6 +1292,16 @@
                     showPanel('panel-daily');
                 } else if (title.includes('复利')) {
                     showPanel('panel-compound');
+                } else if (title.includes('二维码')) {
+                    showPanel('panel-qrcode');
+                } else if (title.includes('房贷')) {
+                    showPanel('panel-mortgage');
+                } else if (title.includes('BMI')) {
+                    showPanel('panel-bmi');
+                } else if (title.includes('密码')) {
+                    showPanel('panel-password');
+                } else if (title.includes('时间戳')) {
+                    showPanel('panel-timestamp');
                 }
             });
         });
@@ -1672,6 +1964,246 @@ Powered by 图像工坊`;
         function showProcessing(show) {
             document.getElementById('processing').classList.toggle('show', show);
         }
+
+        // ========== 二维码生成 ==========
+        let qrcodeObj = null;
+
+        document.getElementById('qrcodeSize').addEventListener('input', (e) => {
+            document.getElementById('qrcodeSizeValue').textContent = e.target.value;
+        });
+
+        document.getElementById('qrcodeGenerate').addEventListener('click', () => {
+            const content = document.getElementById('qrcodeContent').value.trim();
+            if (!content) {
+                showToast('请输入内容');
+                return;
+            }
+            
+            const size = parseInt(document.getElementById('qrcodeSize').value);
+            const canvas = document.getElementById('qrcodeCanvas');
+            canvas.innerHTML = '';
+            
+            qrcodeObj = new QRCode(canvas, {
+                text: content,
+                width: size,
+                height: size,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            document.getElementById('qrcodePreview').style.display = 'block';
+            document.getElementById('qrcodeDownload').style.display = 'inline-flex';
+            showToast('二维码生成成功');
+        });
+
+        document.getElementById('qrcodeDownload').addEventListener('click', () => {
+            const canvas = document.querySelector('#qrcodeCanvas canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('下载成功');
+            }
+        });
+
+        // ========== 房贷计算器 ==========
+        document.getElementById('mortgageCalculate').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('mortgageAmount').value) || 0;
+            const years = parseInt(document.getElementById('mortgageYears').value);
+            const rate = parseFloat(document.getElementById('mortgageRate').value) || 0;
+            const type = document.getElementById('mortgageType').value;
+            
+            if (amount <= 0 || rate <= 0) {
+                showToast('请输入正确的贷款信息');
+                return;
+            }
+            
+            const months = years * 12;
+            const monthlyRate = rate / 100 / 12;
+            const total = amount * 10000;
+            
+            let monthlyPayment, totalInterest, firstMonth, decrease;
+            
+            if (type === 'average') {
+                // 等额本息
+                monthlyPayment = total * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+                totalInterest = monthlyPayment * months - total;
+                firstMonth = monthlyPayment;
+                decrease = 0;
+            } else {
+                // 等额本金
+                const principalPerMonth = total / months;
+                firstMonth = total * monthlyRate + principalPerMonth;
+                decrease = total * monthlyRate / months;
+                totalInterest = (total * monthlyRate * (months + 1)) / 2;
+            }
+            
+            document.getElementById('mortgageFirstMonth').textContent = '¥' + firstMonth.toFixed(2);
+            document.getElementById('mortgageDecrease').textContent = type === 'average' ? '-' : '¥' + decrease.toFixed(2);
+            document.getElementById('mortgageTotalInterest').textContent = '¥' + totalInterest.toFixed(2);
+            document.getElementById('mortgageTotal').textContent = '¥' + (total + totalInterest).toFixed(2);
+            
+            document.getElementById('mortgageResult').style.display = 'block';
+            showToast('计算完成');
+        });
+
+        // ========== BMI计算器 ==========
+        document.getElementById('bmiCalculate').addEventListener('click', () => {
+            const height = parseFloat(document.getElementById('bmiHeight').value) || 0;
+            const weight = parseFloat(document.getElementById('bmiWeight').value) || 0;
+            
+            if (height <= 0 || weight <= 0) {
+                showToast('请输入正确的身高体重');
+                return;
+            }
+            
+            const heightM = height / 100;
+            const bmi = weight / (heightM * heightM);
+            
+            let level, color;
+            if (bmi < 18.5) {
+                level = '偏瘦';
+                color = '#fbbf24';
+            } else if (bmi < 24) {
+                level = '正常';
+                color = '#22c55e';
+            } else if (bmi < 28) {
+                level = '偏胖';
+                color = '#f97316';
+            } else {
+                level = '肥胖';
+                color = '#ef4444';
+            }
+            
+            document.getElementById('bmiValue').textContent = bmi.toFixed(1);
+            document.getElementById('bmiValue').style.color = color;
+            document.getElementById('bmiLevel').textContent = level;
+            
+            document.getElementById('bmiResult').style.display = 'block';
+            showToast('计算完成');
+        });
+
+        // ========== 密码生成器 ==========
+        const pwdChars = {
+            upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lower: 'abcdefghijklmnopqrstuvwxyz',
+            number: '0123456789',
+            symbol: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        document.getElementById('pwdLength').addEventListener('input', (e) => {
+            document.getElementById('pwdLengthValue').textContent = e.target.value;
+        });
+
+        document.getElementById('pwdGenerate').addEventListener('click', () => {
+            const length = parseInt(document.getElementById('pwdLength').value);
+            const useUpper = document.getElementById('pwdUpper').checked;
+            const useLower = document.getElementById('pwdLower').checked;
+            const useNumber = document.getElementById('pwdNumber').checked;
+            const useSymbol = document.getElementById('pwdSymbol').checked;
+            
+            let chars = '';
+            if (useUpper) chars += pwdChars.upper;
+            if (useLower) chars += pwdChars.lower;
+            if (useNumber) chars += pwdChars.number;
+            if (useSymbol) chars += pwdChars.symbol;
+            
+            if (!chars) {
+                showToast('请至少选择一种字符类型');
+                return;
+            }
+            
+            let password = '';
+            const array = new Uint32Array(length);
+            crypto.getRandomValues(array);
+            for (let i = 0; i < length; i++) {
+                password += chars[array[i] % chars.length];
+            }
+            
+            document.getElementById('pwdOutput').textContent = password;
+            
+            // 计算密码强度
+            let strength = '弱';
+            let strengthColor = '#ef4444';
+            let score = 0;
+            if (useUpper) score++;
+            if (useLower) score++;
+            if (useNumber) score++;
+            if (useSymbol) score++;
+            if (length >= 12) score++;
+            if (length >= 16) score++;
+            
+            if (score >= 4) {
+                strength = '强';
+                strengthColor = '#22c55e';
+            } else if (score >= 2) {
+                strength = '中等';
+                strengthColor = '#fbbf24';
+            }
+            
+            document.getElementById('pwdStrength').textContent = strength;
+            document.getElementById('pwdStrength').style.color = strengthColor;
+            
+            document.getElementById('pwdResult').style.display = 'block';
+            document.getElementById('pwdCopy').style.display = 'inline-flex';
+            showToast('密码生成成功');
+        });
+
+        document.getElementById('pwdCopy').addEventListener('click', () => {
+            const pwd = document.getElementById('pwdOutput').textContent;
+            navigator.clipboard.writeText(pwd);
+            showToast('已复制到剪贴板');
+        });
+
+        // ========== 时间戳转换 ==========
+        // 初始化当前时间
+        const now = new Date();
+        const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        document.getElementById('tsDateInput').value = local;
+
+        document.getElementById('tsNow').addEventListener('click', () => {
+            const nowTs = Math.floor(Date.now() / 1000);
+            document.getElementById('tsInput').value = nowTs;
+        });
+
+        document.getElementById('tsToDate').addEventListener('click', () => {
+            const ts = parseInt(document.getElementById('tsInput').value);
+            if (!ts) {
+                showToast('请输入时间戳');
+                return;
+            }
+            
+            // 判断是秒级还是毫秒级
+            const date = ts > 10000000000 ? new Date(ts) : new Date(ts * 1000);
+            
+            document.getElementById('tsSecond').textContent = Math.floor(date.getTime() / 1000);
+            document.getElementById('tsMilli').textContent = date.getTime();
+            document.getElementById('tsDate').textContent = date.toLocaleString('zh-CN');
+            
+            document.getElementById('tsResult').style.display = 'block';
+            showToast('转换成功');
+        });
+
+        document.getElementById('tsToTimestamp').addEventListener('click', () => {
+            const dateStr = document.getElementById('tsDateInput').value;
+            if (!dateStr) {
+                showToast('请选择日期时间');
+                return;
+            }
+            
+            const date = new Date(dateStr);
+            const ts = Math.floor(date.getTime() / 1000);
+            
+            document.getElementById('tsInput').value = ts;
+            document.getElementById('tsSecond').textContent = ts;
+            document.getElementById('tsMilli').textContent = date.getTime();
+            document.getElementById('tsDate').textContent = date.toLocaleString('zh-CN');
+            
+            document.getElementById('tsResult').style.display = 'block';
+            showToast('转换成功');
+        });
     </script>
 </body>
 </html>
