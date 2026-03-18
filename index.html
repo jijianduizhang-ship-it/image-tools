@@ -898,9 +898,53 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-top: 20px; background: #f8f8f8; padding: 20px; border-radius: 12px;">
+                <div style="margin-top: 20px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                     <h4 style="margin-bottom: 12px;">📈 年度收益曲线</h4>
                     <div id="compoundChart" style="overflow-x: auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片转PDF面板 -->
+        <div class="tool-panel" id="panel-image2pdf">
+            <div class="panel-header">
+                <h2>📄 图片转PDF</h2>
+                <p>将多张图片合并转换为PDF文档</p>
+            </div>
+            
+            <div class="upload-area" id="image2pdfUpload" style="border-style: dashed;">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">点击或拖拽上传图片（可多选）</div>
+                <div class="upload-hint">支持 JPG、PNG、WebP 格式，最多20张</div>
+                <input type="file" class="upload-input" id="image2pdfInput" accept="image/*" multiple>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>PDF页面尺寸</label>
+                    <select id="pdfPageSize">
+                        <option value="a4">A4 (210 × 297mm)</option>
+                        <option value="letter">Letter (8.5 × 11in)</option>
+                        <option value="fit">适应图片尺寸</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>图片排列</label>
+                    <select id="pdfLayout">
+                        <option value="1x1">每页1张</option>
+                        <option value="2x2">每页4张 (2×2)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="image2pdfBtn">✨ 生成PDF</button>
+            </div>
+
+            <div class="preview-container" id="image2pdfPreview" style="display: none;">
+                <div class="preview-box">
+                    <h4>已选图片 (<span id="image2pdfCount">0</span>张)</h4>
+                    <div id="image2pdfList" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 200px; overflow-y: auto; padding: 10px;"></div>
                 </div>
             </div>
         </div>
@@ -920,6 +964,8 @@
 
     <div class="toast" id="toast"></div>
 
+    <!-- jsPDF库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -957,7 +1003,7 @@
                 } else if (title.includes('圆角')) {
                     showPanel('panel-rounded');
                 } else if (title.includes('PDF')) {
-                    showToast('图片转PDF功能开发中...');
+                    showPanel('panel-image2pdf');
                 } else if (title.includes('去水印')) {
                     showToast('去水印功能开发中...');
                 } else if (title.includes('日报')) {
@@ -1439,6 +1485,193 @@ Powered by 图像工坊`;
             navigator.clipboard.writeText(text);
             showToast('已复制到剪贴板');
         });
+
+        // ========== 图片转PDF ==========
+        const { jsPDF } = window.jspdf;
+        let image2pdfFiles = [];
+
+        // 文件上传处理
+        document.getElementById('image2pdfInput').addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 20) {
+                showToast('最多只能上传20张图片');
+                return;
+            }
+            image2pdfFiles = files;
+            
+            // 显示预览
+            const previewList = document.getElementById('image2pdfList');
+            previewList.innerHTML = '';
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '60px';
+                    img.style.height = '60px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '8px';
+                    img.style.border = '2px solid rgba(255,255,255,0.2)';
+                    previewList.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            document.getElementById('image2pdfCount').textContent = files.length;
+            document.getElementById('image2pdfPreview').style.display = 'block';
+        });
+
+        // 点击上传区域也触发文件选择
+        document.getElementById('image2pdfUpload').addEventListener('click', () => {
+            document.getElementById('image2pdfInput').click();
+        });
+
+        // 生成PDF
+        document.getElementById('image2pdfBtn').addEventListener('click', async () => {
+            if (image2pdfFiles.length === 0) {
+                showToast('请先上传图片');
+                return;
+            }
+
+            const pageSize = document.getElementById('pdfPageSize').value;
+            const layout = document.getElementById('pdfLayout').value;
+            
+            showProcessing(true);
+            
+            try {
+                // A4尺寸 (mm)
+                const a4Width = 210;
+                const a4Height = 297;
+                // Letter尺寸 (inches转mm)
+                const letterWidth = 215.9;
+                const letterHeight = 279.4;
+                
+                let pdfWidth, pdfHeight;
+                if (pageSize === 'a4') {
+                    pdfWidth = a4Width;
+                    pdfHeight = a4Height;
+                } else if (pageSize === 'letter') {
+                    pdfWidth = letterWidth;
+                    pdfHeight = letterHeight;
+                } else {
+                    pdfWidth = a4Width;
+                    pdfHeight = a4Height;
+                }
+                
+                const pdf = new jsPDF({
+                    orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+                    unit: 'mm',
+                    format: [pdfWidth, pdfHeight]
+                });
+                
+                // 清理之前的内容
+                pdf.deletePage(1);
+                
+                const loadImage = (file) => {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = new Image();
+                            img.onload = () => resolve(img);
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                };
+                
+                let imagesPerPage = layout === '2x2' ? 4 : 1;
+                let pageIndex = 0;
+                let imgIndexOnPage = 0;
+                
+                for (let i = 0; i < image2pdfFiles.length; i++) {
+                    const img = await loadImage(image2pdfFiles[i]);
+                    
+                    if (pageSize === 'fit') {
+                        // 适应图片尺寸
+                        const imgRatio = img.width / img.height;
+                        pdfWidth = 210;
+                        pdfHeight = 210 / imgRatio;
+                        if (pdfHeight > 297) {
+                            pdfHeight = 297;
+                            pdfWidth = 297 * imgRatio;
+                        }
+                        if (i === 0 || imgIndexOnPage === 0) {
+                            pdf.addPage([pdfWidth, pdfHeight]);
+                        }
+                    } else if (i === 0 || imgIndexOnPage === 0) {
+                        pdf.addPage([pdfWidth, pdfHeight]);
+                    }
+                    
+                    let x, y, w, h;
+                    
+                    if (layout === '2x2' && imagesPerPage === 4) {
+                        // 2x2布局
+                        const margin = 10;
+                        const gap = 5;
+                        const cellWidth = (pdfWidth - margin * 2 - gap) / 2;
+                        const cellHeight = (pdfHeight - margin * 2 - gap) / 2;
+                        
+                        const col = imgIndexOnPage % 2;
+                        const row = Math.floor(imgIndexOnPage / 2);
+                        
+                        x = margin + col * (cellWidth + gap);
+                        y = margin + row * (cellHeight + gap);
+                        w = cellWidth;
+                        h = cellHeight;
+                        
+                        // 保持宽高比
+                        const imgRatio = w / h;
+                        const cellRatio = cellWidth / cellHeight;
+                        if (imgRatio > cellRatio) {
+                            h = w / imgRatio;
+                        } else {
+                            w = h * imgRatio;
+                        }
+                        // 居中
+                        x += (cellWidth - w) / 2;
+                        y += (cellHeight - h) / 2;
+                    } else {
+                        // 每页一张
+                        const margin = 10;
+                        const availWidth = pdfWidth - margin * 2;
+                        const availHeight = pdfHeight - margin * 2;
+                        
+                        const imgRatio = img.width / img.height;
+                        const pageRatio = availWidth / availHeight;
+                        
+                        if (imgRatio > pageRatio) {
+                            w = availWidth;
+                            h = w / imgRatio;
+                        } else {
+                            h = availHeight;
+                            w = h * imgRatio;
+                        }
+                        x = (pdfWidth - w) / 2;
+                        y = (pdfHeight - h) / 2;
+                    }
+                    
+                    pdf.addImage(img, 'JPEG', x, y, w, h);
+                    imgIndexOnPage++;
+                    
+                    if (imgIndexOnPage >= imagesPerPage) {
+                        imgIndexOnPage = 0;
+                    }
+                }
+                
+                pdf.save('images.pdf');
+                showToast('PDF生成成功！');
+            } catch (error) {
+                console.error(error);
+                showToast('生成失败: ' + error.message);
+            } finally {
+                showProcessing(false);
+            }
+        });
+
+        // 显示/隐藏处理中遮罩
+        function showProcessing(show) {
+            document.getElementById('processing').classList.toggle('show', show);
+        }
     </script>
 </body>
 </html>
