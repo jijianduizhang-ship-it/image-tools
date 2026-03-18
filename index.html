@@ -620,6 +620,62 @@
                 <p>Unix时间戳互转</p>
                 <span class="tool-tag hot">NEW</span>
             </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">🖼️</div>
+                <h3>图片转Base64</h3>
+                <p>图片编码为Base64字符串</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">📋</div>
+                <h3>Base64编解码</h3>
+                <p>Base64编码与解码</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">🔗</div>
+                <h3>URL编码解码</h3>
+                <p>URL特殊字符转义</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">📅</div>
+                <h3>日期计算器</h3>
+                <p>计算日期间隔和工作日</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">{ }</div>
+                <h3>JSON格式化</h3>
+                <p>JSON解析压缩和高亮</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="convert">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);">🔢</div>
+                <h3>UUID生成器</h3>
+                <p>批量生成唯一ID</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">⏱️</div>
+                <h3>Cron表达式</h3>
+                <p>生成定时任务表达式</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
+            
+            <div class="tool-card" data-category="ai">
+                <div class="tool-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">🎲</div>
+                <h3>随机数生成</h3>
+                <p>指定范围和数量生成</p>
+                <span class="tool-tag hot">NEW</span>
+            </div>
         </div>
 
         <!-- 证件照工具面板 -->
@@ -1229,6 +1285,324 @@
             </div>
         </div>
 
+        <!-- 图片转Base64面板 -->
+        <div class="tool-panel" id="panel-image2base64">
+            <div class="panel-header">
+                <h2>🖼️ 图片转Base64</h2>
+                <p>将图片转换为Base64编码字符串</p>
+            </div>
+            
+            <div class="upload-area" id="base64ImgUpload">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">点击或拖拽上传图片</div>
+                <div class="upload-hint">支持 JPG、PNG、WebP、GIF 格式</div>
+                <input type="file" class="upload-input" id="base64ImgInput" accept="image/*">
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>输出格式</label>
+                    <select id="base64Format">
+                        <option value="dataurl">Data URL (data:image/png;base64,xxx)</option>
+                        <option value="pure">纯Base64字符串</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="base64ImgBtn">✨ 转换为Base64</button>
+                <button class="btn btn-primary" id="base64ImgCopy" style="background: #4CAF50; display: none;">📋 复制结果</button>
+            </div>
+
+            <div id="base64ImgResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="margin-bottom: 12px;">
+                        <span style="color: var(--text-secondary);">原始大小:</span>
+                        <span id="base64ImgSize">-</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="color: var(--text-secondary);">Base64长度:</span>
+                        <span id="base64ImgLen">-</span>
+                    </div>
+                    <textarea id="base64Output" style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text); font-family: monospace; font-size: 12px; resize: vertical;" placeholder="Base64结果..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Base64编解码面板 -->
+        <div class="tool-panel" id="panel-base64">
+            <div class="panel-header">
+                <h2>📋 Base64编解码</h2>
+                <p>Base64编码与解码互转</p>
+            </div>
+            
+            <div class="controls" style="display: block;">
+                <div class="control-group">
+                    <label>输入内容</label>
+                    <textarea id="base64InputText" style="width: 100%; height: 120px; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.08); color: var(--text); resize: vertical;" placeholder="请输入要编码或解码的内容..."></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="base64EncodeBtn">✨ 编码</button>
+                <button class="btn btn-primary" id="base64DecodeBtn">✨ 解码</button>
+                <button class="btn btn-primary" id="base64TextCopy" style="background: #4CAF50; display: none;">📋 复制</button>
+            </div>
+
+            <div id="base64TextResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);">
+                    <label style="display: block; margin-bottom: 12px; color: var(--text-secondary);">结果</label>
+                    <textarea id="base64OutputText" style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text); font-family: monospace; font-size: 13px; resize: vertical;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL编码解码面板 -->
+        <div class="tool-panel" id="panel-urlcode">
+            <div class="panel-header">
+                <h2>🔗 URL编码解码</h2>
+                <p>URL特殊字符转义与反转义</p>
+            </div>
+            
+            <div class="controls" style="display: block;">
+                <div class="control-group">
+                    <label>输入内容</label>
+                    <textarea id="urlInput" style="width: 100%; height: 120px; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.08); color: var(--text); resize: vertical;" placeholder="请输入URL或要编码的内容..."></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="urlEncodeBtn">✨ URL编码</button>
+                <button class="btn btn-primary" id="urlDecodeBtn">✨ URL解码</button>
+                <button class="btn btn-primary" id="urlCopy" style="background: #4CAF50; display: none;">📋 复制</button>
+            </div>
+
+            <div id="urlResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);">
+                    <label style="display: block; margin-bottom: 12px; color: var(--text-secondary);">结果</label>
+                    <textarea id="urlOutput" style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text); font-family: monospace; font-size: 13px; resize: vertical;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日期计算器面板 -->
+        <div class="tool-panel" id="panel-datecalc">
+            <div class="panel-header">
+                <h2>📅 日期计算器</h2>
+                <p>计算日期间隔和工作日</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="control-group">
+                    <label>开始日期</label>
+                    <input type="date" id="dateStart">
+                </div>
+                <div class="control-group">
+                    <label>结束日期</label>
+                    <input type="date" id="dateEnd">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="dateCalcBtn">✨ 计算间隔</button>
+            </div>
+
+            <div id="dateResult" style="display: none; margin-top: 24px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);">
+                    <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center;">📊 计算结果</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">相差天数</div>
+                            <div style="font-size: 32px; font-weight: bold;" id="dateDiffDays">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">相差小时</div>
+                            <div style="font-size: 32px; font-weight: bold;" id="dateDiffHours">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">工作日(周一至五)</div>
+                            <div style="font-size: 32px; font-weight: bold;" id="dateWorkDays">-</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 14px; opacity: 0.9;">周末(周六日)</div>
+                            <div style="font-size: 32px; font-weight: bold;" id="dateWeekendDays">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON格式化面板 -->
+        <div class="tool-panel" id="panel-json">
+            <div class="panel-header">
+                <h2>{ } JSON格式化</h2>
+                <p>JSON解析、压缩和高亮</p>
+            </div>
+            
+            <div class="controls" style="display: block;">
+                <div class="control-group">
+                    <label>输入JSON</label>
+                    <textarea id="jsonInput" style="width: 100%; height: 150px; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.08); color: var(--text); font-family: monospace; resize: vertical;" placeholder='{"key": "value"}'></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="jsonFormatBtn">✨ 格式化</button>
+                <button class="btn btn-primary" id="jsonCompressBtn">✨ 压缩</button>
+                <button class="btn btn-primary" id="jsonCopy" style="background: #4CAF50; display: none;">📋 复制</button>
+            </div>
+
+            <div id="jsonResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);">
+                    <label style="display: block; margin-bottom: 12px; color: var(--text-secondary);">输出 <span id="jsonStatus" style="color: #22c55e;"></span></label>
+                    <textarea id="jsonOutput" style="width: 100%; height: 200px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #a5f3fc; font-family: monospace; font-size: 13px; resize: vertical;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- UUID生成器面板 -->
+        <div class="tool-panel" id="panel-uuid">
+            <div class="panel-header">
+                <h2>🔢 UUID生成器</h2>
+                <p>批量生成唯一标识符</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="control-group">
+                    <label>生成数量: <span id="uuidCountVal">5</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="uuidCount" min="1" max="100" value="5">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>格式</label>
+                    <select id="uuidVersion">
+                        <option value="4">UUID v4 (随机)</option>
+                        <option value="1">UUID v1 (时间戳)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="uuidGenerateBtn">✨ 生成UUID</button>
+                <button class="btn btn-primary" id="uuidCopy" style="background: #4CAF50; display: none;">📋 复制全部</button>
+            </div>
+
+            <div id="uuidResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12);">
+                    <div id="uuidList" style="font-family: monospace; font-size: 13px; max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cron表达式面板 -->
+        <div class="tool-panel" id="panel-cron">
+            <div class="panel-header">
+                <h2>⏱️ Cron表达式</h2>
+                <p>生成定时任务表达式</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(5, 1fr); gap: 12px;">
+                <div class="control-group">
+                    <label>分钟</label>
+                    <select id="cronMinute">
+                        <option value="*">每分钟</option>
+                        <option value="0">0</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>小时</label>
+                    <select id="cronHour">
+                        <option value="*">每小时</option>
+                        <option value="0">0 (午夜)</option>
+                        <option value="6">6 (早上6点)</option>
+                        <option value="9">9 (上午9点)</option>
+                        <option value="12">12 (中午)</option>
+                        <option value="18">18 (下午6点)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>日期</label>
+                    <select id="cronDay">
+                        <option value="*">每天</option>
+                        <option value="1">1号</option>
+                        <option value="15">15号</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>月份</label>
+                    <select id="cronMonth">
+                        <option value="*">每月</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>星期</label>
+                    <select id="cronWeek">
+                        <option value="*">每天</option>
+                        <option value="1-5">工作日</option>
+                        <option value="0,6">周末</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="cronGenerateBtn">✨ 生成表达式</button>
+            </div>
+
+            <div id="cronResult" style="display: none; margin-top: 24px;">
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); color: white; padding: 28px; border-radius: 20px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);">
+                    <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center;">📊 Cron表达式</h3>
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <code id="cronExpr" style="font-size: 28px; background: rgba(0,0,0,0.3); padding: 12px 24px; border-radius: 8px; word-break: break-all;">-</code>
+                    </div>
+                    <div style="text-align: center; font-size: 14px; opacity: 0.9;" id="cronDesc">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 随机数生成面板 -->
+        <div class="tool-panel" id="panel-random">
+            <div class="panel-header">
+                <h2>🎲 随机数生成</h2>
+                <p>指定范围和数量生成随机数</p>
+            </div>
+            
+            <div class="controls" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <div class="control-group">
+                    <label>最小值</label>
+                    <input type="number" id="randMin" value="1">
+                </div>
+                <div class="control-group">
+                    <label>最大值</label>
+                    <input type="number" id="randMax" value="100">
+                </div>
+                <div class="control-group">
+                    <label>生成数量: <span id="randCountVal">1</span></label>
+                    <div class="slider-container">
+                        <input type="range" id="randCount" min="1" max="100" value="1">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>选项</label>
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
+                        <input type="checkbox" id="randUnique" checked> 不重复
+                    </label>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="randGenerateBtn">✨ 生成随机数</button>
+                <button class="btn btn-primary" id="randCopy" style="background: #4CAF50; display: none;">📋 复制</button>
+            </div>
+
+            <div id="randResult" style="display: none; margin-top: 24px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 24px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size: 32px; font-weight: bold; color: #a5f3fc; word-break: break-all;" id="randOutput">-</div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -1302,6 +1676,22 @@
                     showPanel('panel-password');
                 } else if (title.includes('时间戳')) {
                     showPanel('panel-timestamp');
+                } else if (title.includes('Base64') && title.includes('图片')) {
+                    showPanel('panel-image2base64');
+                } else if (title.includes('Base64') && title.includes('编解码')) {
+                    showPanel('panel-base64');
+                } else if (title.includes('URL')) {
+                    showPanel('panel-urlcode');
+                } else if (title.includes('日期计算')) {
+                    showPanel('panel-datecalc');
+                } else if (title.includes('JSON')) {
+                    showPanel('panel-json');
+                } else if (title.includes('UUID')) {
+                    showPanel('panel-uuid');
+                } else if (title.includes('Cron')) {
+                    showPanel('panel-cron');
+                } else if (title.includes('随机数')) {
+                    showPanel('panel-random');
                 }
             });
         });
@@ -2203,6 +2593,335 @@ Powered by 图像工坊`;
             
             document.getElementById('tsResult').style.display = 'block';
             showToast('转换成功');
+        });
+
+        // ========== 图片转Base64 ==========
+        let base64ImgData = null;
+
+        document.getElementById('base64ImgInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                base64ImgData = e.target.result;
+                document.getElementById('base64ImgSize').textContent = (file.size / 1024).toFixed(2) + ' KB';
+                document.getElementById('base64ImgLen').textContent = e.target.result.length + ' 字符';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('base64ImgUpload').addEventListener('click', () => {
+            document.getElementById('base64ImgInput').click();
+        });
+
+        document.getElementById('base64ImgBtn').addEventListener('click', () => {
+            if (!base64ImgData) {
+                showToast('请先上传图片');
+                return;
+            }
+            
+            const format = document.getElementById('base64Format').value;
+            let output = base64ImgData;
+            if (format === 'pure') {
+                output = base64ImgData.split(',')[1];
+            }
+            
+            document.getElementById('base64Output').value = output;
+            document.getElementById('base64ImgResult').style.display = 'block';
+            document.getElementById('base64ImgCopy').style.display = 'inline-flex';
+            showToast('转换成功');
+        });
+
+        document.getElementById('base64ImgCopy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('base64Output').value);
+            showToast('已复制');
+        });
+
+        // ========== Base64编解码 ==========
+        document.getElementById('base64EncodeBtn').addEventListener('click', () => {
+            const input = document.getElementById('base64InputText').value;
+            if (!input) {
+                showToast('请输入内容');
+                return;
+            }
+            try {
+                const output = btoa(unescape(encodeURIComponent(input)));
+                document.getElementById('base64OutputText').value = output;
+                document.getElementById('base64TextResult').style.display = 'block';
+                document.getElementById('base64TextCopy').style.display = 'inline-flex';
+            } catch (e) {
+                showToast('编码失败: ' + e.message);
+            }
+        });
+
+        document.getElementById('base64DecodeBtn').addEventListener('click', () => {
+            const input = document.getElementById('base64InputText').value;
+            if (!input) {
+                showToast('请输入内容');
+                return;
+            }
+            try {
+                const output = decodeURIComponent(escape(atob(input)));
+                document.getElementById('base64OutputText').value = output;
+                document.getElementById('base64TextResult').style.display = 'block';
+                document.getElementById('base64TextCopy').style.display = 'inline-flex';
+            } catch (e) {
+                showToast('解码失败: 无效的Base64字符串');
+            }
+        });
+
+        document.getElementById('base64TextCopy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('base64OutputText').value);
+            showToast('已复制');
+        });
+
+        // ========== URL编码解码 ==========
+        document.getElementById('urlEncodeBtn').addEventListener('click', () => {
+            const input = document.getElementById('urlInput').value;
+            if (!input) {
+                showToast('请输入内容');
+                return;
+            }
+            const output = encodeURIComponent(input);
+            document.getElementById('urlOutput').value = output;
+            document.getElementById('urlResult').style.display = 'block';
+            document.getElementById('urlCopy').style.display = 'inline-flex';
+        });
+
+        document.getElementById('urlDecodeBtn').addEventListener('click', () => {
+            const input = document.getElementById('urlInput').value;
+            if (!input) {
+                showToast('请输入内容');
+                return;
+            }
+            try {
+                const output = decodeURIComponent(input);
+                document.getElementById('urlOutput').value = output;
+                document.getElementById('urlResult').style.display = 'block';
+                document.getElementById('urlCopy').style.display = 'inline-flex';
+            } catch (e) {
+                showToast('解码失败');
+            }
+        });
+
+        document.getElementById('urlCopy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('urlOutput').value);
+            showToast('已复制');
+        });
+
+        // ========== 日期计算器 ==========
+        const today = new Date().toISOString().slice(0, 10);
+        document.getElementById('dateStart').value = today;
+        document.getElementById('dateEnd').value = today;
+
+        document.getElementById('dateCalcBtn').addEventListener('click', () => {
+            const start = new Date(document.getElementById('dateStart').value);
+            const end = new Date(document.getElementById('dateEnd').value);
+            
+            if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                showToast('请选择有效的日期');
+                return;
+            }
+            
+            const diffMs = Math.abs(end - start);
+            const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+            
+            // 计算工作日和周末
+            let workDays = 0, weekendDays = 0;
+            let current = new Date(Math.min(start, end));
+            const endDate = new Date(Math.max(start, end));
+            
+            while (current <= endDate) {
+                const day = current.getDay();
+                if (day === 0 || day === 6) {
+                    weekendDays++;
+                } else {
+                    workDays++;
+                }
+                current.setDate(current.getDate() + 1);
+            }
+            
+            document.getElementById('dateDiffDays').textContent = diffDays + ' 天';
+            document.getElementById('dateDiffHours').textContent = diffHours + ' 小时';
+            document.getElementById('dateWorkDays').textContent = workDays + ' 天';
+            document.getElementById('dateWeekendDays').textContent = weekendDays + ' 天';
+            
+            document.getElementById('dateResult').style.display = 'block';
+            showToast('计算完成');
+        });
+
+        // ========== JSON格式化 ==========
+        document.getElementById('jsonFormatBtn').addEventListener('click', () => {
+            const input = document.getElementById('jsonInput').value.trim();
+            if (!input) {
+                showToast('请输入JSON');
+                return;
+            }
+            try {
+                const obj = JSON.parse(input);
+                const output = JSON.stringify(obj, null, 4);
+                document.getElementById('jsonOutput').value = output;
+                document.getElementById('jsonStatus').textContent = '(有效JSON)';
+                document.getElementById('jsonResult').style.display = 'block';
+                document.getElementById('jsonCopy').style.display = 'inline-flex';
+            } catch (e) {
+                showToast('无效的JSON: ' + e.message);
+            }
+        });
+
+        document.getElementById('jsonCompressBtn').addEventListener('click', () => {
+            const input = document.getElementById('jsonInput').value.trim();
+            if (!input) {
+                showToast('请输入JSON');
+                return;
+            }
+            try {
+                const obj = JSON.parse(input);
+                const output = JSON.stringify(obj);
+                document.getElementById('jsonOutput').value = output;
+                document.getElementById('jsonStatus').textContent = '(已压缩)';
+                document.getElementById('jsonResult').style.display = 'block';
+                document.getElementById('jsonCopy').style.display = 'inline-flex';
+            } catch (e) {
+                showToast('无效的JSON: ' + e.message);
+            }
+        });
+
+        document.getElementById('jsonCopy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').value);
+            showToast('已复制');
+        });
+
+        // ========== UUID生成器 ==========
+        document.getElementById('uuidCount').addEventListener('input', (e) => {
+            document.getElementById('uuidCountVal').textContent = e.target.value;
+        });
+
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function uuidv1() {
+            const now = Date.now();
+            const clock = Math.random() * 0xFFFF;
+            return 'xxxxxxxx-xxxx-1xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                let r = (now + clock) & 0xFFFF;
+                if (c === 'y') {
+                    r = (r & 0x3) | 0x8;
+                }
+                clock >>= 4;
+                return r.toString(16).padStart(4, '0');
+            });
+        }
+
+        document.getElementById('uuidGenerateBtn').addEventListener('click', () => {
+            const count = parseInt(document.getElementById('uuidCount').value);
+            const version = document.getElementById('uuidVersion').value;
+            const list = document.getElementById('uuidList');
+            list.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const uuid = version === '4' ? uuidv4() : uuidv1();
+                const div = document.createElement('div');
+                div.textContent = (i + 1) + '. ' + uuid;
+                div.style.padding = '4px 0';
+                div.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                list.appendChild(div);
+            }
+            
+            document.getElementById('uuidResult').style.display = 'block';
+            document.getElementById('uuidCopy').style.display = 'inline-flex';
+            showToast('生成' + count + '个UUID');
+        });
+
+        document.getElementById('uuidCopy').addEventListener('click', () => {
+            const list = document.getElementById('uuidList');
+            const uuids = Array.from(list.children).map(c => c.textContent.replace(/^\d+\. /, '')).join('\n');
+            navigator.clipboard.writeText(uuids);
+            showToast('已复制');
+        });
+
+        // ========== Cron表达式 ==========
+        document.getElementById('cronGenerateBtn').addEventListener('click', () => {
+            const minute = document.getElementById('cronMinute').value;
+            const hour = document.getElementById('cronHour').value;
+            const day = document.getElementById('cronDay').value;
+            const month = document.getElementById('cronMonth').value;
+            const week = document.getElementById('cronWeek').value;
+            
+            const expr = `${minute} ${hour} ${day} ${month} ${week}`;
+            document.getElementById('cronExpr').textContent = expr;
+            
+            let desc = '';
+            if (minute === '*' && hour === '*' && week === '*') {
+                desc = '每分钟执行';
+            } else if (minute !== '*' && hour === '*') {
+                desc = `每小时的第${minute}分钟执行`;
+            } else if (hour !== '*' && week === '1-5') {
+                const hourNum = parseInt(hour);
+                desc = `工作日 ${hourNum}:${minute === '0' ? '00' : minute} 执行`;
+            } else if (hour !== '*') {
+                const hourNum = parseInt(hour);
+                desc = `每天 ${hourNum}:${minute === '0' ? '00' : minute} 执行`;
+            } else {
+                desc = '自定义定时任务';
+            }
+            
+            document.getElementById('cronDesc').textContent = desc;
+            document.getElementById('cronResult').style.display = 'block';
+            showToast('生成成功');
+        });
+
+        // ========== 随机数生成 ==========
+        document.getElementById('randCount').addEventListener('input', (e) => {
+            document.getElementById('randCountVal').textContent = e.target.value;
+        });
+
+        document.getElementById('randGenerateBtn').addEventListener('click', () => {
+            const min = parseInt(document.getElementById('randMin').value);
+            const max = parseInt(document.getElementById('randMax').value);
+            const count = parseInt(document.getElementById('randCount').value);
+            const unique = document.getElementById('randUnique').checked;
+            
+            if (min > max) {
+                showToast('最小值不能大于最大值');
+                return;
+            }
+            
+            if (unique && (max - min + 1) < count) {
+                showToast('范围太小，无法生成不重复的数');
+                return;
+            }
+            
+            const nums = [];
+            if (unique) {
+                const pool = [];
+                for (let i = min; i <= max; i++) pool.push(i);
+                for (let i = 0; i < count; i++) {
+                    const idx = Math.floor(Math.random() * pool.length);
+                    nums.push(pool.splice(idx, 1)[0]);
+                }
+            } else {
+                for (let i = 0; i < count; i++) {
+                    nums.push(Math.floor(Math.random() * (max - min + 1)) + min);
+                }
+            }
+            
+            document.getElementById('randOutput').textContent = nums.join(count > 1 ? ', ' : '');
+            document.getElementById('randResult').style.display = 'block';
+            document.getElementById('randCopy').style.display = 'inline-flex';
+            showToast('生成成功');
+        });
+
+        document.getElementById('randCopy').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('randOutput').textContent);
+            showToast('已复制');
         });
     </script>
 </body>
